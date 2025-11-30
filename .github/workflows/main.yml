@@ -23,16 +23,30 @@ jobs:
       - name: Build React App
         run: npm run build
 
+      # Debug để chắc chắn là có thư mục dist/build
+      - name: Check build output
+        run: |
+          echo "--- ROOT DIR ---"
+          ls -la
+          echo "--- DIST DIR ---"
+          ls -la dist || echo "dist NOT FOUND"
+          echo "--- BUILD DIR ---"
+          ls -la build || echo "build NOT FOUND"
+
       - name: Copy build folder to EC2
+        if: success()
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
-          source: "build/*"
+
+          # Nếu bạn dùng Vite → đổi về dist/*
+          source: "dist/*"
           target: "/var/www/reactapp"
 
       - name: Restart PM2
+        if: success()
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
