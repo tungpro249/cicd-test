@@ -4,7 +4,7 @@ import InputBase from "../../components/ui/input/InputBase";
 const Home = () => {
   return (
     <>
-    <div>hello</div>
+    <div>hello world</div>
       {/* <InputBase />
       <AvatarBase />; */}
     </>
